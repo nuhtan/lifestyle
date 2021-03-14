@@ -1,8 +1,16 @@
-use std::{io::Error, io::{BufRead, BufReader, Read, Write}, net::{IpAddr, TcpListener, TcpStream}, thread};
+use std::{
+    io::Error,
+    io::{BufRead, BufReader, Write},
+    net::{IpAddr, TcpListener, TcpStream},
+    thread,
+};
 
-use super::{constant::serve_file::{self, generate_response}, response::{self, Response}};
+use super::{
+    constant::serve_file::generate_response,
+    response::Response,
+};
 
-pub const HTML_PATH: &str = "public";
+pub const HTML_PATH: &str = "www";
 
 pub struct Server {
     listener: TcpListener,
@@ -27,10 +35,8 @@ impl Server {
 
     pub fn handle_stream(mut stream: TcpStream) -> Result<(), Error> {
         let mut stream_reader = BufReader::new(stream.try_clone()?);
-        let mut buf = String::new();
-        stream_reader.read_line(&mut buf).unwrap();
-        // let line = std::str::from_utf8(buf.as_slice()).unwrap();\
-        let line = buf;
+        let mut line = String::new();
+        stream_reader.read_line(&mut line).unwrap();
         let method = &line[0..line.find(" ").unwrap()];
         let request = &line[line.find("/").unwrap()..line.find("HTTP").unwrap() - 1];
         println!("[{}]: {} {}", stream.peer_addr().unwrap(), method, request,);
@@ -39,21 +45,21 @@ impl Server {
         stream.shutdown(std::net::Shutdown::Both).unwrap();
         Ok(())
     }
-
-    
 }
 
 pub fn gather_response<'a>(method: &str, request: &'a str) -> Response<'a> {
     match (method, request) {
-        ("GET", req) => 
-            match generate_response(match req {
+        ("GET", req) => match generate_response(
+            match req {
                 "/" => "index.html",
                 "/api" => "explanation.html",
-                _ => req
-            }, HTML_PATH) {
-                Ok(res) => res,
-                Err(res) => res
-            },     
-        _ => serve_file::generate_response("not_found.html", HTML_PATH).unwrap()
-    }   
+                _ => req,
+            },
+            HTML_PATH,
+        ) {
+            Ok(res) => res,
+            Err(res) => res,
+        },
+        _ => generate_response("not_found.html", HTML_PATH).unwrap(),
+    }
 }
