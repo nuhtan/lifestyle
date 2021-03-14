@@ -6,8 +6,8 @@ pub struct Response<'a> {
     body: String,
 }
 
-impl Response<'static> {
-    pub fn new(status: u16, content: &'static str, body: String) -> Response<'static> {
+impl<'a> Response<'a> {
+    pub fn new(status: u16, content: &'a str, body: String) -> Response<'a> {
         Response {
             status_code: status,
             status_text: Response::code_to_text(status),
@@ -25,7 +25,7 @@ impl Response<'static> {
         .to_vec()
     }
 
-    fn code_to_text(code: u16) -> &'static str {
+    fn code_to_text(code: u16) -> &'a str {
         match code {
             100 => "Continue",
             101 => "Switching Protocol",

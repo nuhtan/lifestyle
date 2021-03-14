@@ -2,15 +2,15 @@ use std::{fs, path::Path};
 
 use super::super::response;
 
-pub fn generate_request<'a>(
-    file: &'static str,
-    dir_append: &'static str,
-) -> Result<response::Response<'static>, response::Response<'static>> {
+pub fn generate_response<'a>(
+    file: &'a str,
+    dir_append: &'a str,
+) -> Result<response::Response<'a>, response::Response<'a>> {
     match fs::read_to_string(format!("{}/{}", dir_append, &file)) {
         Ok(contents) => Ok(response::Response::new(200, content_type(file), contents)),
         _ => Err(response::Response::new(
             404,
-            content_type(file),
+            "text/html",
             fs::read_to_string(format!("{}/not_found.html", dir_append)).unwrap(),
         )),
     }
