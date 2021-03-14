@@ -42,7 +42,6 @@ impl Server {
         println!("[{}]: {} {}", stream.peer_addr().unwrap(), method, request,);
         let response = gather_response(method, request);
         stream.write_all(response.to_block().as_slice()).ok();
-        stream.shutdown(std::net::Shutdown::Both).unwrap();
         Ok(())
     }
 }
