@@ -4,14 +4,14 @@ use super::super::response;
 
 pub fn generate_response<'a>(
     file: &'a str,
-    dir_append: &'a str,
+    dir_prepend: &'a str,
 ) -> Result<response::Response<'a>, response::Response<'a>> {
-    match fs::read_to_string(format!("{}/{}", dir_append, &file)) {
+    match fs::read_to_string(format!("{}/{}", dir_prepend, &file)) {
         Ok(contents) => Ok(response::Response::new(200, content_type(file), contents)),
         _ => Err(response::Response::new(
             404,
             "text/html",
-            fs::read_to_string(format!("{}/not_found.html", dir_append)).unwrap(),
+            fs::read_to_string(format!("{}/not_found.html", dir_prepend)).unwrap(),
         )),
     }
 }
