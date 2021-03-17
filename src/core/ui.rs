@@ -1,6 +1,6 @@
 use std::{io::{self, Error}, time::Duration};
 
-use crossterm::{event::{self, Event, KeyCode, poll}, terminal::enable_raw_mode};
+use crossterm::{event::{self, Event, KeyCode, KeyEvent, poll}, terminal::enable_raw_mode};
 use tui::{Terminal, backend::CrosstermBackend, widgets::{Block, Borders}};
 
 pub fn initialize() -> Result<(), Error> {
@@ -8,7 +8,6 @@ pub fn initialize() -> Result<(), Error> {
     enable_raw_mode().unwrap();
     let mut terminal = Terminal::new(backend)?;
     loop {
-        let size;
         terminal.draw(|f| {
             let size = f.size();
             let block = Block::default().title("Blocky").borders(Borders::ALL);
@@ -18,8 +17,12 @@ pub fn initialize() -> Result<(), Error> {
         if poll(Duration::from_millis(1_000)).unwrap() {
             let event = event::read().unwrap();
             match event {
-                Event::Key(KeyCode::Esc) => break,
-
+                Event::Key(key) => {
+                    match key.code {
+                        KeyCode::Esc => break,
+                        _ => {}
+                    }
+                },
                 _ => {}
             }
         }
