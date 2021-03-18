@@ -5,7 +5,9 @@ use std::{
     thread,
 };
 
-use super::{constant::serve_file::generate_response, response::Response, state_data::state::State};
+use super::{
+    constant::serve_file::generate_response, response::Response, state_data::state::State,
+};
 
 pub const HTML_PATH: &str = "www";
 
@@ -17,18 +19,33 @@ pub struct Server {
 impl Server {
     pub fn initialize(addr: IpAddr, port: u16, shared_data: State) -> Server {
         println!("Server listening on http://{}:{}", addr, port);
+        let listener = TcpListener::bind((addr, port)).unwrap();
+        listener.set_nonblocking(true).unwrap(); // Used to better determine when the server should shutdown
         Server {
-            listener: TcpListener::bind((addr, port)).unwrap(),
+            listener,
             shared_data,
         }
     }
 
     pub fn listen(self) -> Result<(), Error> {
         for stream_res in self.listener.incoming() {
-            let stream = stream_res?;
-            let data = self.shared_data.clone();
-            let handle = thread::spawn(move || Server::handle_stream(stream, data));
-            let _exit = handle.join().unwrap();
+            // If the ui has been exited shutdown the listener, any ongoing threads should finish first, i think.
+            if *self.shared_data.clone().running.lock().unwrap() == false {
+                return Ok(());
+            }
+            match stream_res {
+                Ok(stream) => {
+                    let data = self.shared_data.clone();
+                    let handle = thread::spawn(move || Server::handle_stream(stream, data));
+                    let exit = handle.join();
+                    match exit {
+                        // TODO This should be changed
+                        Ok(_) => {}
+                        Err(_) => {}
+                    }
+                }
+                Err(_) => {}
+            }
         }
         Ok(())
     }
@@ -39,7 +56,7 @@ impl Server {
         stream_reader.read_line(&mut line).unwrap();
         let method = &line[0..line.find(" ").unwrap()];
         let request = &line[line.find("/").unwrap()..line.find("HTTP").unwrap() - 1];
-        println!("[{}]: {} {}", stream.peer_addr().unwrap(), method, request,);
+        shared_data.add_request((stream.peer_addr().unwrap(), request.clone().to_owned()));
         let response = gather_response(method, request, shared_data);
         stream.write_all(response.to_block().as_slice()).ok();
         Ok(())

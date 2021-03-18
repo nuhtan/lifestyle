@@ -1,5 +1,8 @@
-#[derive(Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Deserialize, Serialize)]
 pub struct Calories {
+    pub index: u32,
     pub total: u32,
     pub date: (u16, u8, u8),
     pub burn: u32,
@@ -7,8 +10,9 @@ pub struct Calories {
 }
 
 impl Calories {
-    pub fn new(date: (u16, u8, u8)) -> Calories {
+    pub fn new(index: u32, date: (u16, u8, u8)) -> Calories {
         Calories {
+            index,
             total: 0,
             date,
             burn: 0,
@@ -16,8 +20,9 @@ impl Calories {
         }
     }
 
-    pub fn from(total: u32, date: (u16, u8, u8), burn: u32, food: Vec<(String, u32)>) -> Calories {
+    pub fn full(index: u32, total: u32, date: (u16, u8, u8), burn: u32, food: Vec<(String, u32)>) -> Calories {
         Calories {
+            index,
             total,
             date,
             burn,
