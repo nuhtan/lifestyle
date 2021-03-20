@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use tui::widgets::ListState;
 
 pub mod api;
-pub mod constant;
+pub mod content;
 pub mod state_data;
 
 pub mod response;
