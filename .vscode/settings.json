@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "Crossterm",
+        "Deque",
+        "Unprocessable",
         "nonblocking",
         "prepend"
     ]
