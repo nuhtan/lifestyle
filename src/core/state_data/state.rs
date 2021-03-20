@@ -1,4 +1,4 @@
-use std::{fs, io::{BufRead, BufReader, BufWriter, LineWriter, Write}, net::SocketAddr, sync::{Arc, Mutex}};
+use std::{fs, io::{BufRead, BufReader, LineWriter, Write}, net::SocketAddr, sync::{Arc, Mutex}};
 
 use crate::core::StatefulList;
 
@@ -15,19 +15,19 @@ pub struct State {
 
 impl State {
     pub fn new(addr: [u8; 4], port: u16) -> State {
-        fn load_cals() -> Vec<Calories> {
+        fn load_calories() -> Vec<Calories> {
             let file = fs::File::open("database/calories.txt").unwrap();
-            let mut cals = Vec::new();
+            let mut calories = Vec::new();
             for line in BufReader::new(file).lines() {
                 let line = line.unwrap();
                 let cal: Calories = serde_json::from_str(line.as_str()).unwrap();
-                cals.push(cal);
+                calories.push(cal);
             };
-            return cals;
+            return calories;
         }
 
         State {
-            calories: Arc::new(Mutex::new(load_cals())),
+            calories: Arc::new(Mutex::new(load_calories())),
             running: Arc::new(Mutex::new(true)),
             requests: Arc::new(Mutex::new(StatefulList::new())),
             addr,
@@ -35,18 +35,18 @@ impl State {
         }
     }
 
-    pub fn add_request(&self, req: (SocketAddr, String)) {
-        let mut reqs = self.requests.lock().unwrap();
-        reqs.add_request(format!("[{}]: {}", req.0, req.1));
+    pub fn add_request(&self, req: (SocketAddr, String, String)) {
+        let mut requests = self.requests.lock().unwrap();
+        requests.add_request(format!("[{}] ({}) {}", req.0, req.2, req.1));
     }
 
     pub fn save(&self) {
         println!("Saving...");
         let file = fs::File::create("database/calories.txt").unwrap();
         let mut writer = LineWriter::new(file);
-        let cals = self.calories.lock().unwrap().clone();
-        println!("{}", cals.len());
-        for cal in cals {
+        let calories = self.calories.lock().unwrap().clone();
+        println!("{}", calories.len());
+        for cal in calories {
             writer.write_all(serde_json::to_string(&cal.clone()).unwrap().as_bytes()).unwrap();
             writer.write_all(b"\n").unwrap();
         }
