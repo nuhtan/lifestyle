@@ -1,4 +1,4 @@
-use crate::core::{response, state_data::{state::State}};
+use super::{response, State};
 
 pub fn add_day<'a>(
     body: String,
@@ -8,8 +8,16 @@ pub fn add_day<'a>(
         Ok(cal) => {
             let mut state = shared_data.calories.lock().unwrap();
             state.push(cal);
-            Ok(response::Response::<'a>::new(201, "application/json", String::from("{\'status\': \'completed'}")))
-        },
-        Err(_) => Err(response::Response::<'a>::new(400, "application/json", String::from("{\'message\': \'invalid data, could not deserialize\'}")))
+            Ok(response::Response::<'a>::new(
+                201,
+                "application/json",
+                String::from("{\'status\': \'completed'}"),
+            ))
+        }
+        Err(_) => Err(response::Response::<'a>::new(
+            400,
+            "application/json",
+            String::from("{\'message\': \'invalid data, could not deserialize\'}"),
+        )),
     }
 }

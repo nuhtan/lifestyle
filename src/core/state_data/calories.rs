@@ -20,7 +20,13 @@ impl Calories {
         }
     }
 
-    pub fn full(index: u32, total: u32, date: (u16, u8, u8), burn: u32, food: Vec<(String, u32)>) -> Calories {
+    pub fn full(
+        index: u32,
+        total: u32,
+        date: (u16, u8, u8),
+        burn: u32,
+        food: Vec<(String, u32)>,
+    ) -> Calories {
         Calories {
             index,
             total,

@@ -79,7 +79,11 @@ impl Server {
             }
         }
 
-        shared_data.add_request((stream.peer_addr().unwrap(), request.clone().to_owned(), method.clone().to_owned()));
+        shared_data.add_request((
+            stream.peer_addr().unwrap(),
+            request.clone().to_owned(),
+            method.clone().to_owned(),
+        ));
         let response = gather_response(method, request, body, shared_data);
         stream.write_all(response.to_block().as_slice()).ok();
         Ok(())

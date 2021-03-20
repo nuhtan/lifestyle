@@ -130,14 +130,11 @@ pub fn run(app_state: State) -> Result<(), Error> {
                                 .style(Style::default().fg(Color::White))
                                 .bounds([1.0, (calories_len) as f64])
                                 .labels(
-                                    [
-                                        String::from("1"),
-                                        format!("{}", calories_len),
-                                    ]
-                                    .iter()
-                                    .cloned()
-                                    .map(Span::from)
-                                    .collect(),
+                                    [String::from("1"), format!("{}", calories_len)]
+                                        .iter()
+                                        .cloned()
+                                        .map(Span::from)
+                                        .collect(),
                                 ),
                         )
                         .y_axis(

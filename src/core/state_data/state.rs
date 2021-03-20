@@ -1,8 +1,11 @@
-use std::{fs, io::{BufRead, BufReader, LineWriter, Write}, net::SocketAddr, sync::{Arc, Mutex}};
+use std::{
+    fs,
+    io::{BufRead, BufReader, LineWriter, Write},
+    net::SocketAddr,
+    sync::{Arc, Mutex},
+};
 
-use crate::core::StatefulList;
-
-use super::calories::Calories;
+use super::{super::StatefulList, calories::Calories};
 
 #[derive(Clone)]
 pub struct State {
@@ -22,7 +25,7 @@ impl State {
                 let line = line.unwrap();
                 let cal: Calories = serde_json::from_str(line.as_str()).unwrap();
                 calories.push(cal);
-            };
+            }
             return calories;
         }
 
@@ -47,7 +50,9 @@ impl State {
         let calories = self.calories.lock().unwrap().clone();
         println!("{}", calories.len());
         for cal in calories {
-            writer.write_all(serde_json::to_string(&cal.clone()).unwrap().as_bytes()).unwrap();
+            writer
+                .write_all(serde_json::to_string(&cal.clone()).unwrap().as_bytes())
+                .unwrap();
             writer.write_all(b"\n").unwrap();
         }
     }

@@ -6,9 +6,9 @@ pub mod api;
 pub mod constant;
 pub mod state_data;
 
-pub mod ui;
 pub mod response;
 pub mod server;
+pub mod ui;
 pub struct TabsState<'a> {
     pub titles: Vec<&'a str>,
     pub index: usize,
@@ -38,7 +38,7 @@ pub struct UIState<'a> {
 impl<'a> UIState<'a> {
     pub fn new(tab_titles: Vec<&'a str>) -> UIState {
         UIState {
-            tabs: TabsState::new(tab_titles)
+            tabs: TabsState::new(tab_titles),
         }
     }
 }
