@@ -1,13 +1,11 @@
 use std::{
     io::Error,
-    io::{BufRead, BufReader, Write},
+    io::{BufRead, BufReader, Read, Write},
     net::{IpAddr, TcpListener, TcpStream},
     thread,
 };
 
-use super::{
-    constant::serve_file::generate_response, response::Response, state_data::state::State,
-};
+use super::{api, constant::serve_file, response::Response, state_data::state::State};
 
 pub const HTML_PATH: &str = "www";
 
@@ -52,20 +50,50 @@ impl Server {
 
     pub fn handle_stream(mut stream: TcpStream, shared_data: State) -> Result<(), Error> {
         let mut stream_reader = BufReader::new(stream.try_clone()?);
-        let mut line = String::new();
-        stream_reader.read_line(&mut line).unwrap();
+        let mut lines = String::new();
+        stream_reader.read_line(&mut lines).unwrap();
+        let mut lines2 = lines.clone();
+        let line = &mut lines[..lines2.len() - 2];
+
         let method = &line[0..line.find(" ").unwrap()];
         let request = &line[line.find("/").unwrap()..line.find("HTTP").unwrap() - 1];
-        shared_data.add_request((stream.peer_addr().unwrap(), request.clone().to_owned()));
-        let response = gather_response(method, request, shared_data);
+        loop {
+            let count = stream_reader.read_line(&mut lines2).unwrap();
+            if count == 2 {
+                break;
+            }
+        }
+
+        let mut body = String::new();
+        if method == "POST" {
+            let split = lines2.split("\r\n");
+            for l in split {
+                if l.len() >= 17 {
+                    if &l[0..16] == "Content-Length: " {
+                        let length: usize = l[16..].parse().unwrap();
+                        let mut temp_buf = vec![0; length];
+                        stream_reader.read_exact(&mut temp_buf).unwrap();
+                        body = String::from_utf8(temp_buf).unwrap();
+                    }
+                }
+            }
+        }
+
+        shared_data.add_request((stream.peer_addr().unwrap(), request.clone().to_owned(), method.clone().to_owned()));
+        let response = gather_response(method, request, body, shared_data);
         stream.write_all(response.to_block().as_slice()).ok();
         Ok(())
     }
 }
 
-pub fn gather_response<'a>(method: &str, request: &'a str, shared_data: State) -> Response<'a> {
+pub fn gather_response<'a>(
+    method: &str,
+    request: &'a str,
+    body: String,
+    shared_data: State,
+) -> Response<'a> {
     match (method, request) {
-        ("GET", req) => match generate_response(
+        ("GET", req) => match serve_file::generate_response(
             match req {
                 "/" => "index.html",
                 "/api" => "explanation.html",
@@ -76,6 +104,10 @@ pub fn gather_response<'a>(method: &str, request: &'a str, shared_data: State) -
             Ok(res) => res,
             Err(res) => res,
         },
-        _ => generate_response("not_found.html", HTML_PATH).unwrap(),
+        ("POST", req) => match api::apply_request(req, body, shared_data) {
+            Ok(res) => res,
+            Err(res) => res,
+        },
+        _ => serve_file::generate_response("not_found.html", HTML_PATH).unwrap(),
     }
 }
