@@ -15,8 +15,8 @@ pub struct Server {
 }
 
 impl Server {
+    /// Binds the listener to a port and address and sets nonblocking to true, afterwards returning the struct.
     pub fn initialize(addr: IpAddr, port: u16, shared_data: State) -> Server {
-        println!("Server listening on http://{}:{}", addr, port);
         let listener = TcpListener::bind((addr, port)).unwrap();
         listener.set_nonblocking(true).unwrap(); // Used to better determine when the server should shutdown
         Server {
@@ -25,6 +25,7 @@ impl Server {
         }
     }
 
+    /// Listens for incoming connections and spawns a thread to handle each.
     pub fn listen(self) -> Result<(), Error> {
         for stream_res in self.listener.incoming() {
             // If the ui has been exited shutdown the listener, any ongoing threads should finish first, i think.
@@ -48,6 +49,7 @@ impl Server {
         Ok(())
     }
 
+    // TODO simplify this method, all of the read lines should happen in the loop.
     pub fn handle_stream(mut stream: TcpStream, shared_data: State) -> Result<(), Error> {
         let mut stream_reader = BufReader::new(stream.try_clone()?);
         let mut lines = String::new();
@@ -90,6 +92,7 @@ impl Server {
     }
 }
 
+/// Depending on the method and request return a Response for the request.
 pub fn gather_response<'a>(
     method: &str,
     request: &'a str,

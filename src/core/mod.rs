@@ -1,3 +1,4 @@
+/// Module wide documentation?
 use std::collections::VecDeque;
 
 use tui::widgets::ListState;

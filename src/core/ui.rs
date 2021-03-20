@@ -19,6 +19,7 @@ use tui::{
     Terminal,
 };
 
+/// The main method for running the cli ui.
 pub fn run(app_state: State) -> Result<(), Error> {
     let backend = CrosstermBackend::new(io::stdout());
     enable_raw_mode().unwrap();
