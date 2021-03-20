@@ -87,17 +87,17 @@ pub fn run(app_state: State) -> Result<(), Error> {
                     );
                 }
                 1 => {
-                    // Generate data sets based on the calorie data. There should be 3 sets of data, the total calorie intake and the total burn are scatterplots and the combined calories for the day is a line graph.
-                    let cals = app_state.calories.lock().unwrap().clone();
+                    // Generate data sets based on the calorie data. There should be 3 sets of data, the total calorie intake and the total burn are scatter plots and the combined calories for the day is a line graph.
+                    let calories = app_state.calories.lock().unwrap().clone();
                     let mut combined_data: Vec<(f64, f64)> = Vec::new();
                     let mut consume_data: Vec<(f64, f64)> = Vec::new();
                     let mut burn_data: Vec<(f64, f64)> = Vec::new();
-                    let cals_len = cals.len();
+                    let calories_len = calories.len();
 
-                    for cal in cals {
-                        combined_data.push(((cal.index + 1) as f64, cal.total as f64));
-                        consume_data.push(((cal.index + 1) as f64, (cal.total + cal.burn) as f64));
-                        burn_data.push(((cal.index + 1) as f64, cal.burn as f64));
+                    for cal in calories {
+                        combined_data.push(((cal.index) as f64, cal.total as f64));
+                        consume_data.push(((cal.index) as f64, (cal.total + cal.burn) as f64));
+                        burn_data.push(((cal.index) as f64, cal.burn as f64));
                     }
 
                     let combined = Dataset::default()
@@ -128,12 +128,11 @@ pub fn run(app_state: State) -> Result<(), Error> {
                                     Style::default().fg(Color::LightYellow),
                                 ))
                                 .style(Style::default().fg(Color::White))
-                                .bounds([1.0, cals_len as f64])
+                                .bounds([1.0, (calories_len) as f64])
                                 .labels(
                                     [
                                         String::from("1"),
-                                        format!("{}", cals_len / 2),
-                                        format!("{}", cals_len),
+                                        format!("{}", calories_len),
                                     ]
                                     .iter()
                                     .cloned()
