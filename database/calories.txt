@@ -1,0 +1,3 @@
+{"index":1,"total":1500,"date":[2021,3,18],"burn":500,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}
+{"index":2,"total":1800,"date":[2021,3,19],"burn":500,"food":[["Steak",1000],["Salad",200],["Ice cream",800],["Chips",300]]}
+{"index":3,"total":1500,"date":[2021,3,18],"burn":500,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}
