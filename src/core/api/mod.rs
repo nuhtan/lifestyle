@@ -33,7 +33,6 @@ mod tests {
     fn apply_incorrect_path() {
         let state = State::new([0, 0, 0, 0], 8020);
         let body = String::from("{\"index\":1,\"total\":200,\"date\":[2021,3,18],\"burn\":300,\"food\":[[\"Steak\",500]]}");
-        // let response = String::from_utf8(apply_request("/api/calorie/add/day", body, state).unwrap().to_block()).unwrap();
         let result = apply_request("/api/calorie/add/day", body, state);
         assert!(result.is_err());
         let response = String::from_utf8(result.expect_err("This should be an error").to_block()).unwrap();
