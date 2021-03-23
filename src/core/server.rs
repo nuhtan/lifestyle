@@ -103,7 +103,7 @@ pub fn gather_response<'a>(
         ("GET", req) => match serve_file::generate_response(
             match req {
                 "/" => "index.html",
-                "/api" => "explanation.html",
+                "/api" => "api/explanation.html",
                 _ => req,
             },
             HTML_PATH,
