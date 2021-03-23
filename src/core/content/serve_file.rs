@@ -77,8 +77,8 @@ mod tests {
 
     #[test]
     fn generate_good_response() {
-        let response = String::from_utf8(generate_response("index.html", "www").unwrap().to_block()).unwrap();
-        assert_eq!(response, "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\'utf-8\'>\n    <title>test</title>\n</head>\n<body>\n    Hi!\n    <button onclick=\"test()\">click</button>\n    <script src=\"test.js\"></script>\n</body>\n</html>", "Did not get proper response");
+        let response = String::from_utf8(generate_response("sample.html", "www").unwrap().to_block()).unwrap();
+        assert_eq!(response, "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\'utf-8\'>\n    <title>Sample</title>\n</head>\n<body>\n    This is just a sample html file.\n</body>\n</html>", "Did not get proper response");
     }
 
     #[test]
