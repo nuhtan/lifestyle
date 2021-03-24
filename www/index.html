@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./style.css" />
 </head>
 
-<body>
+<body onload="fetch_data()">
     <main>
         <section class="glass">
             <div class="dashboard">
@@ -38,31 +38,33 @@
             </div>
             <div class="games">
                 <div class="status">
-                    <h1>Goal Status</h1>
+                    <h1 id="pageTitle">Goal Status</h1>
                 </div>
-                <div class="cards">
-                    <div class="card">
-                        <div class="card-info">
-                            <h2>Weight</h2>
-                            <p>Overall Goal: 1xx lbs</p>
+                <div id="pageBody">
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-info">
+                                <h2>Weight</h2>
+                                <p>Overall Goal: 1xx lbs</p>
+                            </div>
+                            <h2 class="percentage">NA%</h2>
                         </div>
-                        <h2 class="percentage">NA%</h2>
-                    </div>
-                    <div class="card">
-                        <div class="card-info">
-                            <h2>Valorant</h2>
-                            <p>Target Rank: Gold 1</p>
+                        <div class="card">
+                            <div class="card-info">
+                                <h2>Valorant</h2>
+                                <p>Target Rank: Gold 1</p>
+                            </div>
+                            <h2 class="percentage">30%</h2>
                         </div>
-                        <h2 class="percentage">30%</h2>
-                    </div>
-                    <div class="card">
-                        <div class="card-info">
-                            <h2>Website Progress</h2>
-                            <p>Feature Completion</p>
+                        <div class="card">
+                            <div class="card-info">
+                                <h2>Website Progress</h2>
+                                <p>Feature Completion</p>
+                            </div>
+                            <h2 class="percentage">20%</h2>
                         </div>
-                        <h2 class="percentage">20%</h2>
+                        
                     </div>
-                    
                 </div>
             </div>
         </section>
