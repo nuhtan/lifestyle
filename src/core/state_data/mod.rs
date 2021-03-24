@@ -1,7 +1,10 @@
 pub mod calories;
+pub mod progress;
+pub mod shopping_item;
 pub mod state;
+pub mod valorant_game;
 
-use std::{fs, io::{BufRead, BufReader, Read}};
+use std::{fs, io::{BufReader, Read}};
 
 use serde::{Deserialize, Serialize};
 
