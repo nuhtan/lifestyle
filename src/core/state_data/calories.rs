@@ -40,21 +40,21 @@ impl Calories {
         }
     }
 
-    pub fn burn(&mut self, amount: u32) {
-        self.burn += amount;
-        self.calculate_total();
-    }
+    // pub fn burn(&mut self, amount: u32) {
+    //     self.burn += amount;
+    //     self.calculate_total();
+    // }
 
-    pub fn add_food(&mut self, name: String, calories: u32) {
-        self.food.push((name, calories));
-        self.calculate_total();
-    }
+    // pub fn add_food(&mut self, name: String, calories: u32) {
+    //     self.food.push((name, calories));
+    //     self.calculate_total();
+    // }
 
-    fn calculate_total(&mut self) {
-        let mut consume_total = 0;
-        for (_item, cal) in &self.food {
-            consume_total += cal;
-        }
-        self.total = consume_total - self.burn;
-    }
+    // fn calculate_total(&mut self) {
+    //     let mut consume_total = 0;
+    //     for (_item, cal) in &self.food {
+    //         consume_total += cal;
+    //     }
+    //     self.total = consume_total - self.burn;
+    // }
 }
