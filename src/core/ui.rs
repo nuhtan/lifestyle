@@ -182,5 +182,7 @@ pub fn run(app_state: State) -> Result<(), Error> {
         }
     }
     terminal.clear()?;
+    crossterm::terminal::disable_raw_mode().unwrap();
+    println!("");
     Ok(())
 }
