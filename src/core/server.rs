@@ -5,7 +5,7 @@ use std::{
     thread,
 };
 
-use super::{api, content::serve_file, response::Response, state_data::state::State};
+use super::{api::{self, populated::generate_goals}, content::serve_file, response::Response, state_data::state::State};
 
 pub const HTML_PATH: &str = "www";
 
@@ -100,16 +100,18 @@ pub fn gather_response<'a>(
     shared_data: State,
 ) -> Response<'a> {
     match (method, request) {
-        ("GET", req) => match serve_file::generate_response(
+        ("GET", req) => {
             match req {
-                "/" => "index.html",
-                "/api" => "api/explanation.html",
-                _ => req,
-            },
-            HTML_PATH,
-        ) {
-            Ok(res) => res,
-            Err(res) => res,
+                "/api/pages/goals" => generate_goals(shared_data),
+                "/api/pages/calories" => generate_goals(shared_data),
+                "/api/pages/shopping" => generate_goals(shared_data),
+                "/api/pages/valorant" => generate_goals(shared_data),
+                "/api/pages/progress" => generate_goals(shared_data),
+                "/" | "/api" | _ => match serve_file::generate_response(req, HTML_PATH) {
+                    Ok(res) => res,
+                    Err(res) => res
+                }
+            }
         },
         ("POST", req) => match api::apply_request(req, body, shared_data) {
             Ok(res) => res,
