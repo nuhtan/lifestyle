@@ -16,7 +16,7 @@ pub struct Basic {
 
 impl Basic {
     pub fn load() -> Basic {
-        let file = fs::File::open("database/calories.txt").unwrap();
+        let file = fs::File::open("database/basic.json").unwrap();
         let mut content = String::new();
         BufReader::new(file).read_to_string(&mut content).unwrap();
         let base: Basic = serde_json::from_str(content.as_str()).unwrap();
