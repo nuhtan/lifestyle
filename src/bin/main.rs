@@ -16,5 +16,6 @@ fn main() -> Result<(), Error> {
     *shared_data.running.lock().unwrap() = false;
     server_handle.join().unwrap();
     shared_data.save();
+
     Ok(())
 }
