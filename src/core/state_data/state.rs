@@ -5,11 +5,12 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use super::{super::StatefulList, calories::Calories};
+use super::{super::StatefulList, Basic, calories::Calories};
 
 #[derive(Clone)]
 pub struct State {
     pub calories: Arc<Mutex<Vec<Calories>>>,
+    pub basics: Arc<Mutex<Basic>>,
     pub running: Arc<Mutex<bool>>,
     pub requests: Arc<Mutex<StatefulList<String>>>,
     pub addr: [u8; 4],
@@ -31,6 +32,7 @@ impl State {
 
         State {
             calories: Arc::new(Mutex::new(load_calories())),
+            basics: Arc::new(Mutex::new(Basic::load())),
             running: Arc::new(Mutex::new(true)),
             requests: Arc::new(Mutex::new(StatefulList::new())),
             addr,
