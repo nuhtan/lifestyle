@@ -26,13 +26,13 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(self, addr: [u8; 4], port: u16) -> State {
+    pub fn new(addr: [u8; 4], port: u16) -> State {
         State {
-            calories: Arc::new(Mutex::new(self.load_vectored("calories.txt"))),
+            calories: Arc::new(Mutex::new(State::load_vectored("calories.txt"))),
             basics: Arc::new(Mutex::new(Basic::load())),
             progress: Arc::new(Mutex::new(Progress::load())),
-            valorant: Arc::new(Mutex::new(self.load_vectored("valorant.txt"))),
-            shopping: Arc::new(Mutex::new(self.load_vectored("shopping.txt"))),
+            valorant: Arc::new(Mutex::new(State::load_vectored("valorant.txt"))),
+            shopping: Arc::new(Mutex::new(State::load_vectored("shopping.txt"))),
             running: Arc::new(Mutex::new(true)),
             requests: Arc::new(Mutex::new(StatefulList::new())),
             addr,
@@ -51,7 +51,7 @@ impl State {
         calories
     }
 
-    fn load_vectored<'a, T: Clone + Deserialize<'a> + Serialize>(self, file: &str) -> Vec<T> {
+    pub fn load_vectored<'a, T: Clone + Deserialize<'a> + Serialize>(file: &str) -> Vec<T> {
         let file = fs::File::open(format!("database/{}", file)).unwrap();
         let mut vector = Vec::new();
         for line in BufReader::new(file).lines() {
