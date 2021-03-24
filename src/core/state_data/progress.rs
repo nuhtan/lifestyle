@@ -28,6 +28,6 @@ impl Progress {
 
 #[derive(Clone, Deserialize, Serialize)]
 pub enum ToDo {
-    Bug((bool, String)),
-    Feature((bool, String))
+    Bug(bool, String),
+    Feature(bool, String),
 }
