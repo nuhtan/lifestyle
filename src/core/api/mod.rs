@@ -9,7 +9,6 @@ pub fn apply_request<'a>(
     shared_data: State,
 ) -> Result<response::Response<'a>, response::Response<'a>> {
     match path {
-        // "/api/current" => get_current(shared_data),
         "/api/calories/add/day" => calories::add_day(body, shared_data),
         _ => Err(response::Response::new(
             404,
@@ -18,10 +17,6 @@ pub fn apply_request<'a>(
         )),
     }
 }
-
-// fn get_current<'a>(shared_data: State) -> Result<response::Response<'a>, response::Response<'a>> {
-    
-// }
 
 #[cfg(test)]
 mod tests {
