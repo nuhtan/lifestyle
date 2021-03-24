@@ -18,26 +18,26 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(addr: [u8; 4], port: u16) -> State {
-        fn load_calories() -> Vec<Calories> {
-            let file = fs::File::open("database/calories.txt").unwrap();
-            let mut calories = Vec::new();
-            for line in BufReader::new(file).lines() {
-                let line = line.unwrap();
-                let cal: Calories = serde_json::from_str(line.as_str()).unwrap();
-                calories.push(cal);
-            }
-            return calories;
-        }
-
+    pub fn new(self, addr: [u8; 4], port: u16) -> State {
         State {
-            calories: Arc::new(Mutex::new(load_calories())),
+            calories: Arc::new(Mutex::new(self.load_calories())),
             basics: Arc::new(Mutex::new(Basic::load())),
             running: Arc::new(Mutex::new(true)),
             requests: Arc::new(Mutex::new(StatefulList::new())),
             addr,
             port,
         }
+    }
+    
+    fn load_calories(self) -> Vec<Calories> {
+        let file = fs::File::open("database/calories.txt").unwrap();
+        let mut calories = Vec::new();
+        for line in BufReader::new(file).lines() {
+            let line = line.unwrap();
+            let cal: Calories = serde_json::from_str(line.as_str()).unwrap();
+            calories.push(cal);
+        }
+        return calories;
     }
 
     pub fn add_request(&self, req: (SocketAddr, String, String)) {
