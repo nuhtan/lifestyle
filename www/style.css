@@ -74,25 +74,6 @@
     flex: 2;
   }
   
-  .pro {
-    background: linear-gradient(to right top, #c365df, #6cdbeb);
-    border-radius: 2rem;
-    color: white;
-    padding: 1rem;
-    position: relative;
-  }
-  
-  .pro img {
-    position: absolute;
-    top: -10%;
-    right: 10%;
-  }
-  .pro h2 {
-    width: 40%;
-    color: white;
-    font-weight: 600;
-  }
-  
   /* GAMES */
   .status {
     margin-bottom: 3rem;
@@ -141,4 +122,16 @@
     background: linear-gradient(to right top, #2f5e41, #417256);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .add {
+    border-radius: 15%;
+    height: 25px;
+    width: 25px;
+    border: none;
+    background-color: #624296;
+  }
+
+  .add h2 {
+    color: white;
   }
