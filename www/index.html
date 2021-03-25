@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
+
 </head>
 
 <body onload="fetch_data()">
@@ -20,19 +21,19 @@
                 </div>
                 <div class="links">
                     <div class="link">
-                        <h2>Goals</h2>
+                        <h2 onclick="swap_page(0)">Goals</h2>
                     </div>
                     <div class="link">
-                        <h2>Calories</h2>
+                        <h2 onclick="swap_page(1)">Calories</h2>
                     </div>
                     <div class="link">
-                        <h2>Shopping</h2>
+                        <h2 onclick="swap_page(2)">Shopping</h2>
                     </div>
                     <div class="link">
-                        <h2>Valorant</h2>
+                        <h2 onclick="swap_page(3)">Valorant</h2>
                     </div>
                     <div class="link">
-                        <h2>Website</h2>
+                        <h2 onclick="swap_page(4)">Website</h2>
                     </div>
                 </div>
             </div>
@@ -41,35 +42,94 @@
                     <h1 id="pageTitle">Goal Status</h1>
                 </div>
                 <div id="pageBody">
-                    <div class="cards">
-                        <div class="card">
-                            <div class="card-info">
-                                <h2>Weight</h2>
-                                <p>Overall Goal: 1xx lbs</p>
-                            </div>
-                            <h2 class="percentage">NA%</h2>
-                        </div>
-                        <div class="card">
-                            <div class="card-info">
-                                <h2>Valorant</h2>
-                                <p>Target Rank: Gold 1</p>
-                            </div>
-                            <h2 class="percentage">30%</h2>
-                        </div>
-                        <div class="card">
-                            <div class="card-info">
-                                <h2>Website Progress</h2>
-                                <p>Feature Completion</p>
-                            </div>
-                            <h2 class="percentage">20%</h2>
-                        </div>
-                        
-                    </div>
+                
                 </div>
             </div>
         </section>
     </main>
     <script src="index.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script>
+        let data
+        let burn = []
+        let calories = []
+        let consumed = []
+        let weight = []
+        let labels = []
+        function fetch_cals() {
+            burn = []
+            calories = []
+            consumed = []
+            weight = []
+            labels = []
+            fetch('/api/calories').then(response => {
+                response.json().then(content => {
+                    data = content
+                    data.forEach(day => {
+                        burn.push({ x: day.index, y: day.burn })
+                        calories.push({ x: day.index, y: day.total })
+                        consumed.push({ x: day.index, y: day.total + day.burn })
+                        weight.push({ x: day.index, y: day.day_weight })
+                        labels.push(day.index)
+                    });
+                    display();
+                });
+            });
+        }
+        
+        function display() {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Calories',
+                            backgroundColor: '#624296',
+                            borderColor: '#624296',
+                            data: calories,
+                            fill: false
+                        },
+                        {
+                            label: 'Consumed',
+                            backgroundColor: '#eeec71',
+                            borderColor: '#eeec71',
+                            data: consumed,
+                            fill: false
+                        },
+                        {
+                            label: 'Burn',
+                            backgroundColor: '#ee7177',
+                            borderColor: '#ee7177',
+                            data: burn,
+                            fill: false
+                        },
+                        {
+                            label: 'Weight',
+                            backgroundColor: '#68c9a4',
+                            borderColor: '#68c9a4',
+                            data: weight,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    }
+                }
+            });
+        }
     </script>
 </body>
 
