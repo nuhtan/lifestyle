@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Progress {
-    in_progress: Vec<ToDo>
+    pub in_progress: Vec<ToDo>
 }
 
 impl Progress {
