@@ -1,14 +1,14 @@
-void function fetch_data() {
-    let storage = window.localStorage;
-    let data = fetch('/api/current');
-    data.then(response => {
-        response.json().then(contents => {
-            console.log(contents);
-        });
-    });
+function fetch_data() {
+    // let storage = window.localStorage;
+    // let data = fetch('/api/current');
+    // data.then(response => {
+    //     response.text().then(content => {
+    //         console.log(content);
+    //     })
+    // });
+    swap_page(0);
 }
-
-void function swap_page(page: Number) {
+function swap_page(page: Number) {
     let title = document.getElementById("pageTitle");
     let body = document.getElementById("pageBody");
     switch (page) {
@@ -23,6 +23,12 @@ void function swap_page(page: Number) {
             break;
         case 1:
             title.innerHTML = "Calorie Tracking";
+            fetch("api/pages/calories").then(response => {
+                let data = response.text();
+                data.then(contents => {
+                    body.innerHTML = contents;
+                });
+            });
             break;
         case 2:
             title.innerHTML = "Long Term Shopping";
