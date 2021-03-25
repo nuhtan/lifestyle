@@ -61,7 +61,7 @@ pub fn generate_calories<'a>() -> Response<'a> {
             <div class=\"card-\">
                 <h2>
                     Calorie Progress 
-                    <button class=\"add\">
+                    <button class=\"add\" id=\"add\">
                         <h2>+</h2>
                     </button>
                 </h2>
