@@ -1,3 +1,3 @@
-{"index":1,"total":1500,"date":[2021,3,18],"burn":500,"end_weight":155.2,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}
-{"index":2,"total":1500,"date":[2021,3,18],"burn":500,"end_weight":155.1,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}
-{"index":3,"total":1500,"date":[2021,3,18],"burn":500,"end_weight":154.9,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}
+{"index":1,"total":1500,"date":[2021,3,18],"burn":500,"day_weight":191.2,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}
+{"index":2,"total":1500,"date":[2021,3,18],"burn":500,"day_weight":191.1,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}
+{"index":3,"total":1500,"date":[2021,3,18],"burn":500,"day_weight":191.9,"food":[["Steak",1000],["Salad",200],["Ice cream",800]]}

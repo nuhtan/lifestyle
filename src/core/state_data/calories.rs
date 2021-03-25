@@ -6,7 +6,7 @@ pub struct Calories {
     pub total: u32,
     pub date: (u16, u8, u8),
     pub burn: u32,
-    pub end_weight: f32,
+    pub day_weight: f32,
     pub food: Vec<(String, u32)>,
 }
 
@@ -17,7 +17,7 @@ impl Calories {
             total: 0,
             date,
             burn: 0,
-            end_weight: 0.0,
+            day_weight: 0.0,
             food: Vec::new(),
         }
     }
@@ -27,7 +27,7 @@ impl Calories {
         total: u32,
         date: (u16, u8, u8),
         burn: u32,
-        end_weight: f32,
+        day_weight: f32,
         food: Vec<(String, u32)>,
     ) -> Calories {
         Calories {
@@ -35,7 +35,7 @@ impl Calories {
             total,
             date,
             burn,
-            end_weight,
+            day_weight,
             food,
         }
     }
