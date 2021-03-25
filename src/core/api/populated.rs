@@ -1,36 +1,77 @@
-// use super::{response::Response, State};
+use super::{super::state_data::progress::ToDo, response::Response, State};
 
-// pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
-//     let recent_cals = shared_data.calories.lock().unwrap().first().unwrap();
-//     let content = format!(
-//     "<div class=\"cards\">
-//         <div class=\"card\">
-//             <div class=\"card-info\">
-//                 <h2>Weight</h2>
-//                 <p>Overall Goal: 145 lbs</p>
-//             </div>
-//             <h2 class=\"percentage\">{}%</h2>
-//         </div>
-//         <div class=\"card\">
-//             <div class=\"card-info\">
-//                 <h2>Valorant</h2>
-//                 <p>Target Rank: Gold 1</p>
-//             </div>
-//             <h2 class=\"percentage\">{}%</h2>
-//         </div>
-//         <div class=\"card\">
-//             <div class=\"card-info\">
-//                 <h2>Website Progress</h2>
-//                 <p>Feature Completion</p>
-//             </div>
-//             <h2 class=\"percentage\">{}%</h2>
-//         </div>
-//     </div>", "", "", "");
-// }
+pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
+    let cals = shared_data.calories.lock().unwrap().clone();
+    let recent_cals = cals.last().unwrap();
+    let games = shared_data.valorant.lock().unwrap().clone();
+    let recent_game = games.last().unwrap();
+    let progress = shared_data.progress.lock().unwrap().clone();
+    let prog = progress.in_progress;
+    let prog_len = prog.len().clone();
+    let mut count_done: u32 = 0;
+    let mut _count_not_done: u32 = 0;
+    for todo in prog {
+        match todo {
+            ToDo::Bug(finished, _) => {
+                match finished {
+                    true => count_done += 1,
+                    false => _count_not_done += 1,
+                }
+            },
+            ToDo::Feature(finished, _) => {
+                match finished {
+                    true => count_done += 1,
+                    false => _count_not_done += 1,
+                }
+            }
+        }
+    }
+    let targets = shared_data.basics.lock().unwrap().clone();
+    let content = format!(
+    "<div class=\"cards\">
+        <div class=\"card\">
+            <div class=\"card-info\">
+                <h2>Weight</h2>
+                <p>Overall Goal: 160 lbs</p>
+            </div>
+            <h2 class=\"percentage\">{:.2}%</h2>
+        </div>
+        <div class=\"card\">
+            <div class=\"card-info\">
+                <h2>Valorant</h2>
+                <p>Target Rank: Gold 1</p>
+            </div>
+            <h2 class=\"percentage\">{:.2}%</h2>
+        </div>
+        <div class=\"card\">
+            <div class=\"card-info\">
+                <h2>Website Progress</h2>
+                <p>Feature Completion</p>
+            </div>
+            <h2 class=\"percentage\">{:.2}%</h2>
+        </div>
+    </div>", 100.0 * (targets.weight_start - recent_cals.day_weight) / (targets.weight_start - targets.weight_goal), 100.0 * (recent_game.rank_rating_after as f32 / targets.rank_goal as f32), 100.0 / (count_done as f32 / prog_len as f32));
+    Response::new(200, "text/html", content)
+}
 
-// pub fn generate_calories<'a>(shared_data: State) -> Response<'a> {
-
-// }
+pub fn generate_calories<'a>() -> Response<'a> {
+    let content = "
+    <div class=\"cards\">
+        <div class=\"card\">
+            <div class=\"card-\">
+                <h2>
+                    Calorie Progress 
+                    <button class=\"add\">
+                        <h2>+</h2>
+                    </button>
+                </h2>
+                <canvas id=\"myChart\" width=\"600\" height=\"400\"></canvas>
+                <iframe onload=\"fetch_cals()\" style=\"position: absolute;width:0;height:0;border:0;\"></iframe>
+            </div>
+        </div>
+    </div>";
+    Response::new(200, "text/html", String::from(content))
+}
 
 // pub fn generate_shopping<'a>(shared_data: State) -> Response<'a> {
 
