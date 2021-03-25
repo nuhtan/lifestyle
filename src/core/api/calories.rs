@@ -22,6 +22,18 @@ pub fn add_day<'a>(
     }
 }
 
+pub fn gather<'a>(shared_data: State) -> response::Response<'a> {
+    let calories = shared_data.calories.lock().unwrap().clone();
+    match serde_json::to_string(&calories) {
+        Ok(body) => response::Response::new(200, "application/json", body),
+        Err(_) => response::Response::new(
+            500,
+            "application/json",
+            String::from("{\"status\":\"Could not serialize vector of calories\""),
+        ),
+    }
+}
+
 // #[cfg(test)]
 // mod tests {
 //     use super::{add_day, State};
