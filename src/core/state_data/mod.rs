@@ -10,7 +10,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Basic {
-    pub weight_goal: u32,
+    pub weight_goal: f32,
+    pub weight_start: f32,
     pub rank_goal: u32
 }
 
