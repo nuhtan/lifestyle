@@ -64,11 +64,12 @@ function choose_modal(page: Number) {
 
 var modal;
 var btn;
-var span;
+var closeButton;
 
 function modalSetup() {
     modal = document.getElementById("myModal");
     btn = document.getElementById("add");
+    closeButton = document.getElementsByClassName("close")[0];
 
     btn.onclick = function () {
         modal.style.display = "block";
@@ -77,6 +78,10 @@ function modalSetup() {
         //     case 1:
         choose_modal(0);
         // }
+    }
+
+    closeButton.onclick = function () {
+        modal.style.display = "none";
     }
 
     window.onclick = function (event) {
@@ -89,3 +94,4 @@ function modalSetup() {
 function removeFood(element) {
     element.parentElement.remove();
 }
+
