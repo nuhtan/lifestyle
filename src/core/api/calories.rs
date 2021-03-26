@@ -11,13 +11,13 @@ pub fn add_day<'a>(
             Ok(response::Response::<'a>::new(
                 201,
                 "application/json",
-                String::from("{\'status\': \'completed'}"),
+                String::from("{\"status\": \"completed\"}"),
             ))
         }
         Err(_) => Err(response::Response::<'a>::new(
             400,
             "application/json",
-            String::from("{\'message\': \'invalid data, could not deserialize\'}"),
+            String::from("{\"message\": \"invalid data, could not deserialize\"}"),
         )),
     }
 }
