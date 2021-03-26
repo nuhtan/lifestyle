@@ -25,14 +25,14 @@ mod tests {
     #[test]
     fn apply_correct() {
         let state = State::new([0, 0, 0, 0], 8020);
-        let body = String::from("{\"index\":1,\"total\":200,\"date\":[2021,3,18],\"burn\":300,\"food\":[[\"Steak\",500]]}");
+        let body = String::from("{\"index\":1,\"total\":200,\"day_weight\":190.1,\"date\":[2021,3,18],\"burn\":300,\"food\":[[\"Steak\",500]]}");
         let response = String::from_utf8(
             apply_request("/api/calories/add/day", body, state)
                 .unwrap()
                 .to_block(),
         )
         .unwrap();
-        assert_eq!(response, String::from("HTTP/1.1 201 Created\r\nContent-Type: application/json\r\n\r\n{\'status\': \'completed\'}"), "This should work");
+        assert_eq!(response, String::from("HTTP/1.1 201 Created\r\nContent-Type: application/json\r\n\r\n{\"status\": \"completed\"}"), "This should work");
     }
 
     #[test]
