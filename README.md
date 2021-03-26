@@ -8,3 +8,12 @@ This is a website and server that is intended to be used to track and display pr
 
 ## What works?
 - None of the website properly interacts with the server at this stage. The cli for the server has regressed after changes to the calorie struct.
+
+## How you can run this project:
+- Make sure that you have both Rust and Typescript installed.
+```
+git clone https://github.com/nuhtan/lifestyle.git
+tsc
+cargo build --release
+./target/release/main
+```
