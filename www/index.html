@@ -14,8 +14,13 @@
     <main>
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Some text in the Modal..</h2>
+                <div class="modal-body" id="modal-body">
+                    
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" onclick="postForm()" class="modal-button submit">Submit</button>
+                    <button class="modal-button close">Close</button>
+                </div>
             </div>
         </div>
         <section class="glass">
@@ -83,6 +88,7 @@
                 });
             });
         }
+        let chart;
 
         function display() {
             var ctx = document.getElementById('myChart').getContext('2d');
@@ -135,6 +141,7 @@
                     }
                 }
             });
+            chart = myChart;
         }
         var modal;
         var btn;
@@ -153,6 +160,11 @@
             // When the user clicks on the button, open the modal
             btn.onclick = function () {
                 modal.style.display = "block";
+
+                // switch (page) {
+                //     case 1:
+                        choose_modal(0);
+                // }
             }
 
             // When the user clicks on <span> (x), close the modal
@@ -166,6 +178,91 @@
                     modal.style.display = "none";
                 }
             }
+        }
+
+        function choose_modal(page) {
+            let body = document.getElementById("modal-body");
+            switch (page) {
+                case 0:
+                    fetch("api/pages/modal/calories").then(response => {
+                        let data = response.text();
+                        data.then(contents => {
+                            body.innerHTML = contents;
+                        });
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        async function postForm() {
+            let indexVal = document.getElementById("index").value;
+            let weightVal = document.getElementById("day_weight").value;
+            let burnVal = document.getElementById("calories_burned").value;
+            let dateObj = new Date();
+            let foodVal = [];
+            let date = [dateObj.getYear(), dateObj.getMonth(), dateObj.getDate()];
+            let children = document.getElementById("itemList").childNodes;
+            let c = []
+            children.forEach(child => {
+                c.push(child);
+            });
+            c.shift();
+            c.forEach(child => {
+                let parts = child.textContent.substr(1).split(": ");
+                foodVal.push([parts[0], parseInt(parts[1])]);
+            });
+            let fullCalories = 0
+            foodVal.forEach(item => {
+                fullCalories += item[1]
+            });
+
+            let data = {
+                "index": parseInt(indexVal),
+                "total": fullCalories - burnVal,
+                "date": date,
+                "burn": parseInt(burnVal),
+                "day_weight": parseFloat(weightVal),
+                "food": foodVal
+            };
+
+            let end = await fetch("/api/calories/add/day", {
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => {
+                return res.json().then(body => {
+                    return body;
+                });
+            });
+            if (end.status == "completed") {
+                chart.data.labels.push(parseInt(indexVal));
+                chart.data.datasets[0].data.push(parseInt(fullCalories - burnVal))
+                chart.data.datasets[1].data.push(parseInt(fullCalories))
+                chart.data.datasets[2].data.push(parseInt(burnVal))
+                chart.data.datasets[3].data.push(parseFloat(weightVal))
+                chart.update();
+                document.getElementById("myModal").style.display = "none";
+            }
+        }
+
+        function addFood() {
+            var name = document.getElementById("FoodName").value;
+            var cals = document.getElementById("FoodCals").value;
+            let button = document.createElement('button');
+            button.textContent = "-";
+            button.setAttribute("onclick", "removeFood(this)");
+            let li = document.createElement("li");
+            li.appendChild(button);
+            let text = document.createTextNode(`${name}: ${cals}`);
+            li.appendChild(text)
+            document.getElementById("itemList").appendChild(li)
+            document.getElementById("FoodName").value = "";
+            document.getElementById("FoodCals").value = "";
+        }
+
+        function removeFood(element) {
+            element.parentElement.remove();
         }
     </script>
 </body>

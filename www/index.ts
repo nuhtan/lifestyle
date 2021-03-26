@@ -20,6 +20,7 @@ function swap_page(page: Number) {
                     body.innerHTML = contents;
                 });
             });
+            page = 0;
             break;
         case 1:
             title.innerHTML = "Calorie Tracking";
@@ -29,6 +30,7 @@ function swap_page(page: Number) {
                     body.innerHTML = contents;
                 });
             });
+            page = 1;
             break;
         case 2:
             title.innerHTML = "Long Term Shopping";
@@ -38,6 +40,22 @@ function swap_page(page: Number) {
             break;
         case 4:
             title.innerHTML = "Website Progress";
+            break;
+        default:
+            break;
+    }
+}
+
+function choose_modal(page: Number) {
+    let body = document.getElementById("modal-body");
+    switch (page) {
+        case 0:
+            fetch("api/pages/modal/calories").then(response => {
+                let data = response.text();
+                data.then(contents => {
+                    body.innerHTML = contents;
+                });
+            });
             break;
         default:
             break;
