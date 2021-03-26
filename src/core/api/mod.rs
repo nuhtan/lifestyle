@@ -1,7 +1,7 @@
 use super::{response, state_data::state::State};
 
 pub mod calories;
-pub mod populated;
+pub mod rendered;
 
 pub fn apply_request<'a>(
     path: &'a str,
