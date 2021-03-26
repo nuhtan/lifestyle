@@ -61,3 +61,31 @@ function choose_modal(page: Number) {
             break;
     }
 }
+
+var modal;
+var btn;
+var span;
+
+function modalSetup() {
+    modal = document.getElementById("myModal");
+    btn = document.getElementById("add");
+
+    btn.onclick = function () {
+        modal.style.display = "block";
+
+        // switch (page) {
+        //     case 1:
+        choose_modal(0);
+        // }
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+}
+
+function removeFood(element) {
+    element.parentElement.remove();
+}

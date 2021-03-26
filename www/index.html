@@ -15,7 +15,7 @@
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <div class="modal-body" id="modal-body">
-                    
+
                 </div>
                 <div class="modal-buttons">
                     <button type="button" onclick="postForm()" class="modal-button submit">Submit</button>
@@ -143,58 +143,6 @@
             });
             chart = myChart;
         }
-        var modal;
-        var btn;
-        var span;
-
-        function modalSetup() {
-            // Get the modal
-            modal = document.getElementById("myModal");
-
-            // Get the button that opens the modal
-            btn = document.getElementById("add");
-
-            // Get the <span> element that closes the modal
-            span = document.getElementsByClassName("close")[0];
-
-            // When the user clicks on the button, open the modal
-            btn.onclick = function () {
-                modal.style.display = "block";
-
-                // switch (page) {
-                //     case 1:
-                        choose_modal(0);
-                // }
-            }
-
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function () {
-                modal.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-        }
-
-        function choose_modal(page) {
-            let body = document.getElementById("modal-body");
-            switch (page) {
-                case 0:
-                    fetch("api/pages/modal/calories").then(response => {
-                        let data = response.text();
-                        data.then(contents => {
-                            body.innerHTML = contents;
-                        });
-                    });
-                    break;
-                default:
-                    break;
-            }
-        }
 
         async function postForm() {
             let indexVal = document.getElementById("index").value;
@@ -261,9 +209,7 @@
             document.getElementById("FoodCals").value = "";
         }
 
-        function removeFood(element) {
-            element.parentElement.remove();
-        }
+
     </script>
 </body>
 
