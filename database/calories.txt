@@ -1,1 +1,1 @@
-{"index":1,"total":1500,"date":[2021,3,26],"burn":500,"day_weight":187.8,"food":[["Pizza",540],["Salad",200],["Ice cream",800]]}
+{"index":1,"total":1790,"date":[2021,3,26],"burn":0,"day_weight":187.8,"food":[["Pizza",540],["Pineapple and Mushroom Stirfry",850],["Hot Chocolate",400]]}
