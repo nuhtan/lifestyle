@@ -3,7 +3,9 @@
         "Crossterm",
         "Deque",
         "Unprocessable",
+        "cals",
         "nonblocking",
+        "preconnect",
         "prepend",
         "valorant"
     ]
