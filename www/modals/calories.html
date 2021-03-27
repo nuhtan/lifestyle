@@ -1,0 +1,16 @@
+<input type="number" value="{}" id="index" hidden>
+<div class="modal-split">
+    <input type="number" id="day_weight" class="modal-input" placeholder="Start Weight" step="0.1">
+    <input type="number" id="calories_burned" class="modal-input" placeholder="Calories Burned" step="1">
+</div>
+<div class="modal-sub-div">
+    <div class="modal-split">
+        <input type="text" class="modal-input" placeholder="Food Name" id="FoodName">
+        <input type="number" class="modal-input" placeholder="Calories" id="FoodCals">
+        <button class="modal-add-button" onclick="addFood()">+</button>
+    </div>
+    <div class="list-div">
+        <ul id="itemList">
+        </ul>
+    </div>
+</div>
