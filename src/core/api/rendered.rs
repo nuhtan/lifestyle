@@ -58,7 +58,7 @@ pub fn generate_calories<'a>() -> Response<'a> {
     let content = "
     <div class=\"cards\">
         <div class=\"card\">
-            <div class=\"card-\">
+            <div class=\"card-info\">
                 <h2>
                     Calorie Progress 
                     <button class=\"add\" id=\"add\">
@@ -81,9 +81,60 @@ pub fn generate_calories<'a>() -> Response<'a> {
 
 // }
 
-// pub fn generate_progress<'a>(shared_data: State) -> Response<'a> {
+pub fn generate_progress<'a>(shared_data: State) -> Response<'a> {
+    let prog = shared_data.progress.lock().unwrap().clone();
+    let mut content = String::from("
+    <div class=\"cards\">
+        <div class=\"card\">
+            <div class=\"card-info\">
+                <h2>
+                    Current Progress
+                    <button class=\"add\" id=\"add\">
+                        <h2>+</h2>
+                    </button>
+                </h2>
+                <ul class=\"scrolly\">");
+    for todo in prog.in_progress {
+        let mut item = format!("<li><button onclick=\"toggleToDo(this)\"");
+        match todo {
+            ToDo::Bug(done, message) => {
+                match done {
+                    true => {
+                        item.push_str(" class=\"progress progress-done\">Done</button>");
+                    },
+                    false => {
+                        item.push_str(" class=\"progress progress-wip\">WIP</button>");
+                    }
+                }
+                item.push_str("<h3>Bug: ");
+                item.push_str(&message[..]);
+                item.push_str("</h3>");
+            },
+            ToDo::Feature(done, message) => {
+                match done {
+                    true => {
+                        item.push_str(" class=\"progress progress-done\">Done</button>");
+                    },
+                    false => {
+                        item.push_str(" class=\"progress progress-wip\">WIP</button>");
+                    }
+                }
+                item.push_str("<h3>Feature:");
+                item.push_str(&message[..]);
+                item.push_str("</h3>");
+            },
+        }
+        item.push_str("</li>");
+        content.push_str(&item[..]);
+    }
 
-// }
+    content.push_str("</ul>
+            </div>
+        </div>
+        <iframe onload=\"modalSetup(1)\" style=\"position: absolute;width:0;height:0;border:0;\"></iframe>
+    </div>");
+    Response::new(200, "text/html", String::from(content))
+}
 
 pub fn modal_calories<'a>(shared_data: State) -> Response<'a> {
     let cals = shared_data.calories.lock().unwrap().clone();
@@ -105,5 +156,19 @@ pub fn modal_calories<'a>(shared_data: State) -> Response<'a> {
             </ul>
         </div>
     </div>", index);
+    Response::new(200, "text/html", String::from(content))
+}
+
+pub fn modal_progress<'a>() -> Response<'a> {
+    let content = "
+    <div class=\"modal-split\">
+        <h3 class=\"wip-text\">Bug</h3>
+        <label class=\"switch\">
+            <input type=\"checkbox\">
+            <span class=\"slider round\" id=\"checkBug\" checked=false onclick=\"toggleSwitch(this)\"></span>
+        </label>
+        <h3 class=\"done-text\">Feature</h3>
+        <input type=\"number\" id=\"description\" class=\"modal-input\" placeholder=\"Description\" step=\"1\">
+    </div>";
     Response::new(200, "text/html", String::from(content))
 }
