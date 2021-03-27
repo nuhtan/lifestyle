@@ -104,10 +104,11 @@ pub fn gather_response<'a>(
             match req {
                 "/api/pages/goals" => rendered::generate_goals(shared_data),
                 "/api/pages/calories" => rendered::generate_calories(),
-                // "/api/pages/shopping" => generate_goals(shared_data),
-                // "/api/pages/valorant" => generate_goals(shared_data),
-                // "/api/pages/progress" => generate_goals(shared_data),
+                // "/api/pages/shopping" => rendered::generate_goals(shared_data),
+                // "/api/pages/valorant" => rendered::generate_goals(shared_data),
+                "/api/pages/progress" => rendered::generate_progress(shared_data),
                 "/api/pages/modal/calories" => rendered::modal_calories(shared_data),
+                "/api/pages/modal/progress" => rendered::modal_progress(),
                 "/api/calories" => calories::gather(shared_data),
                 _ => match serve_file::generate_response(match req {
                     "/" => "index.html",
