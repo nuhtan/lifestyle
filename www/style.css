@@ -68,6 +68,7 @@
   }
   .link h2 {
     padding: 0rem 2rem;
+    cursor: pointer;
   }
   
   .games {
@@ -130,6 +131,7 @@
     width: 25px;
     border: none;
     background-color: #624296;
+    cursor: pointer;
   }
 
   .add h2 {
@@ -178,6 +180,7 @@
   font-size: 18px;
   height: 2rem;
   color: white;
+  cursor: pointer;
 }
 
 .modal-add-button {
@@ -188,6 +191,7 @@
   background-color: #624296;
   color: white;
   width: 1.5rem;
+  cursor: pointer;
 }
 
 .modal-split {
@@ -273,6 +277,7 @@ input[type=number] {
   width: 4rem;
   margin-right: 5px;
   color: white;
+  cursor: pointer;
 }
 
 .progress-done {
