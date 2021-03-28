@@ -1,5 +1,9 @@
 var currentPage;
 
+if (window.localStorage.getItem("foods") == null) {
+    window.localStorage.setItem("foods", JSON.stringify([]));
+}
+
 function fetch_data() {
     // let storage = window.localStorage;
     // let data = fetch('/api/current');
@@ -10,6 +14,7 @@ function fetch_data() {
     // });
     swap_page(0);
 }
+
 function swap_page(page: Number) {
     let title = document.getElementById("pageTitle");
     let body = document.getElementById("pageBody");
@@ -55,13 +60,16 @@ function swap_page(page: Number) {
 
 function choose_modal(page: Number) {
     let body = document.getElementById("modal-body");
-    console.log(page);
     switch (page) {
         case 0:
             fetch("api/pages/modal/calories").then(response => {
                 let data = response.text();
                 data.then(contents => {
                     body.innerHTML = contents;
+                    let foods = JSON.parse(window.localStorage.getItem("foods"));
+                    foods.forEach(food => {
+                        addFoodBack(food.name, food.cals);
+                    });
                 });
             });
             break;
@@ -104,7 +112,15 @@ function modalSetup(modalPage: Number) {
 }
 
 function removeFood(element) {
+    let parts = element.parentElement.childNodes[1].data.split(": ");
     element.parentElement.remove();
+    let foods = JSON.parse(window.localStorage.getItem("foods"));
+    for (var i = 0; i < foods.length; i++) {
+        if (foods[i].name == parts[0] && foods[i].cals == parts[1]) {
+            foods.splice(i, 1);
+        }
+    }
+    window.localStorage.setItem("foods", JSON.stringify(foods));
 }
 
 function toggleToDo(element) {
@@ -117,4 +133,33 @@ function toggleSwitch(element) {
     } else {
         element.attributes["checked"].value = "false";
     }
+}
+
+function addFood() {
+    var name = <HTMLInputElement> document.getElementById("FoodName");
+    var cals = <HTMLInputElement> document.getElementById("FoodCals");
+    let button = <HTMLButtonElement> document.createElement('button');
+    button.textContent = "-";
+    button.setAttribute("onclick", "removeFood(this)");
+    let li = document.createElement("li");
+    li.appendChild(button);
+    let text = document.createTextNode(`${name.value}: ${cals.value}`);
+    li.appendChild(text)
+    document.getElementById("itemList").appendChild(li);
+    let foods = JSON.parse(window.localStorage.getItem("foods"));
+    foods.push({"name": name.value, "cals": cals.value});
+    window.localStorage.setItem("foods", JSON.stringify(foods));
+    (<HTMLInputElement> document.getElementById("FoodName")).value = "";
+    (<HTMLInputElement> document.getElementById("FoodCals")).value = "";
+}
+
+function addFoodBack(name: String, cals: Number) {
+    let button = <HTMLButtonElement> document.createElement('button');
+    button.textContent = "-";
+    button.setAttribute("onclick", "removeFood(this)");
+    let li = document.createElement("li");
+    li.appendChild(button);
+    let text = document.createTextNode(`${name}: ${cals}`);
+    li.appendChild(text)
+    document.getElementById("itemList").appendChild(li);
 }

@@ -190,22 +190,8 @@
                 chart.data.datasets[3].data.push(parseFloat(weightVal))
                 chart.update();
                 document.getElementById("myModal").style.display = "none";
+                window.localStorage.setItem("foods", JSON.stringify([]));
             }
-        }
-
-        function addFood() {
-            var name = document.getElementById("FoodName").value;
-            var cals = document.getElementById("FoodCals").value;
-            let button = document.createElement('button');
-            button.textContent = "-";
-            button.setAttribute("onclick", "removeFood(this)");
-            let li = document.createElement("li");
-            li.appendChild(button);
-            let text = document.createTextNode(`${name}: ${cals}`);
-            li.appendChild(text)
-            document.getElementById("itemList").appendChild(li)
-            document.getElementById("FoodName").value = "";
-            document.getElementById("FoodCals").value = "";
         }
     </script>
 </body>
