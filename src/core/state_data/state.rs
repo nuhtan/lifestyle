@@ -1,5 +1,7 @@
 use std::{fs::{self, File}, io::{BufRead, BufReader, LineWriter, Write}, net::SocketAddr, path::{Path, PathBuf}, sync::{Arc, Mutex}};
 
+use serde::Serialize;
+
 use super::{
     super::StatefulList, calories::Calories, progress::Progress, shopping_item::ShoppingItem,
     valorant_game::ValorantGame, Basic,
@@ -72,42 +74,29 @@ impl State {
         requests.add_request(format!("[{}] ({}) {}", req.0, req.2, req.1));
     }
 
-    // TODO should be possible to break into a single function that saves each but at this point the lifetimes and generics are a bit daunting
     pub fn save(self) {
         println!("Saving...");
-        let vector = self.calories.lock().unwrap().clone();
-        let file = fs::File::create(format!("database/calories.txt")).unwrap();
-        let mut writer = LineWriter::new(file);
-        let len = vector.len();
-        for item in vector {
-            writer
-                .write_all(serde_json::to_string(&item.clone()).unwrap().as_bytes())
-                .unwrap();
-            writer.write_all(b"\n").unwrap();
-        }
-        println!("Wrote {} calorie entries to file.", len);
-        let vector = self.shopping.lock().unwrap().clone();
-        let file = fs::File::create(format!("database/shopping.txt")).unwrap();
-        let mut writer = LineWriter::new(file);
-        let len = vector.len();
-        for item in vector.iter() {
-            writer
-                .write_all(serde_json::to_string(&item.clone()).unwrap().as_bytes())
-                .unwrap();
-            writer.write_all(b"\n").unwrap();
-        }
-        println!("Wrote {} shopping entries to file.", len);
-        let vector = self.valorant.lock().unwrap().clone();
+        let second = self.clone();
+        let third = self.clone();
+            let vec_cals = self.calories.lock().unwrap().clone();
+            println!("Wrote {} calorie entries to file.", self.save_gen(vec_cals.clone()));
+            let vec_shop = second.shopping.lock().unwrap().clone();
+            println!("Wrote {} shopping entries to file.", second.save_gen(vec_shop.clone()));
+            let vec_val = third.valorant.lock().unwrap().clone();
+            println!("Wrote {} valorant entries to file.", third.save_gen(vec_val.clone()));
+    }
+
+    pub fn save_gen<T: Serialize>(self, list: Vec<T>) -> usize {
         let file = fs::File::create(format!("database/valorant.txt")).unwrap();
         let mut writer = LineWriter::new(file);
-        let len = vector.len();
-        for item in vector.iter() {
+        let len = list.len();
+        for item in list.iter() {
             writer
                 .write_all(serde_json::to_string(&item.clone()).unwrap().as_bytes())
                 .unwrap();
             writer.write_all(b"\n").unwrap();
         }
-        println!("Wrote {} valorant entries to file.", len);
+        return len;
     }
 
     pub fn verify_files_exist() {
