@@ -1,9 +1,4 @@
-use std::{
-    fs,
-    io::{BufRead, BufReader, LineWriter, Write},
-    net::SocketAddr,
-    sync::{Arc, Mutex},
-};
+use std::{fs::{self, File}, io::{BufRead, BufReader, LineWriter, Write}, net::SocketAddr, path::{Path, PathBuf}, sync::{Arc, Mutex}};
 
 use super::{
     super::StatefulList, calories::Calories, progress::Progress, shopping_item::ShoppingItem,
@@ -25,6 +20,7 @@ pub struct State {
 
 impl State {
     pub fn new(addr: [u8; 4], port: u16) -> State {
+        State::verify_files_exist();
         State {
             calories: Arc::new(Mutex::new(State::load_calories())),
             basics: Arc::new(Mutex::new(Basic::load())),
@@ -112,5 +108,17 @@ impl State {
             writer.write_all(b"\n").unwrap();
         }
         println!("Wrote {} valorant entries to file.", len);
+    }
+
+    pub fn verify_files_exist() {
+        let strs: [&str; 5] = ["basic.json", "calories.txt", "progress.txt", "shopping.txt", "valorant.txt"];
+        let paths: Vec<PathBuf> = strs
+            .iter()
+            .map(|x| Path::new("database/").join(x)).collect();
+        for path in paths {
+            if !path.exists() {
+                File::create(path).unwrap();
+            }
+        }
     }
 }
