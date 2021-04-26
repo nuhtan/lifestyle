@@ -4,6 +4,7 @@
         "Deque",
         "Unprocessable",
         "cals",
+        "mutexes",
         "nonblocking",
         "preconnect",
         "prepend",
