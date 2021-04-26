@@ -163,3 +163,7 @@ function addFoodBack(name: String, cals: Number) {
     li.appendChild(text)
     document.getElementById("itemList").appendChild(li);
 }
+
+function update() {
+    
+}

@@ -1,1 +1,0 @@
-{"kills":15,"deaths":12,"assists":4,"character":"Omen","map":"Ascent","reportable_teammate":false,"reportable_round_start":0,"reportable_on_own_team":false,"rank_rating_after":472,"rank_rating_change":17}

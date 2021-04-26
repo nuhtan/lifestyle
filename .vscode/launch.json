@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "Test",
+            "projectName": "tracking_36989d7d"
+        },
+        {
+            "type": "java",
+            "name": "Launch Sample",
+            "request": "launch",
+            "mainClass": "Sample",
+            "projectName": "tracking_36989d7d"
+        },
+        {
             "type": "lldb",
             "request": "launch",
             "name": "Debug unit tests in library 'tracking'",
