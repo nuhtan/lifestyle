@@ -124,6 +124,6 @@ pub fn gather_response<'a>(
             Ok(res) => res,
             Err(res) => res,
         },
-        _ => serve_file::generate_response("not_found.html", HTML_PATH).unwrap(),
+        _ => serve_file::generate_response("not_found.html", HTML_PATH).unwrap(), // TODO this doesn't properly respond to other methods such as DELETE
     }
 }
