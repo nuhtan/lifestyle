@@ -1,4 +1,10 @@
-use std::{fs::{self, File}, io::{BufRead, BufReader, LineWriter, Write}, net::SocketAddr, path::{Path, PathBuf}, sync::{Arc, Mutex}};
+use std::{
+    fs::{self, File},
+    io::{BufRead, BufReader, LineWriter, Write},
+    net::SocketAddr,
+    path::{Path, PathBuf},
+    sync::{Arc, Mutex},
+};
 
 use serde::Serialize;
 
@@ -76,17 +82,27 @@ impl State {
 
     pub fn save(self) {
         println!("Saving...");
+        // Cloned data for working mutexes
         let second = self.clone();
         let third = self.clone();
-            let vec_cals = self.calories.lock().unwrap().clone();
-            println!("Wrote {} calorie entries to file.", self.save_gen(vec_cals.clone()));
-            let vec_shop = second.shopping.lock().unwrap().clone();
-            println!("Wrote {} shopping entries to file.", second.save_gen(vec_shop.clone()));
-            let vec_val = third.valorant.lock().unwrap().clone();
-            println!("Wrote {} valorant entries to file.", third.save_gen(vec_val.clone()));
+        let vec_cals = self.calories.lock().unwrap().clone();
+        println!(
+            "Wrote {} calorie entries to file.",
+            self.save_generic(vec_cals.clone())
+        );
+        let vec_shop = second.shopping.lock().unwrap().clone();
+        println!(
+            "Wrote {} shopping entries to file.",
+            second.save_generic(vec_shop.clone())
+        );
+        let vec_val = third.valorant.lock().unwrap().clone();
+        println!(
+            "Wrote {} valorant entries to file.",
+            third.save_generic(vec_val.clone())
+        );
     }
 
-    pub fn save_gen<T: Serialize>(self, list: Vec<T>) -> usize {
+    pub fn save_generic<T: Serialize>(self, list: Vec<T>) -> usize {
         let file = fs::File::create(format!("database/valorant.txt")).unwrap();
         let mut writer = LineWriter::new(file);
         let len = list.len();
@@ -100,10 +116,17 @@ impl State {
     }
 
     pub fn verify_files_exist() {
-        let files: [&str; 5] = ["basic.json", "calories.txt", "progress.txt", "shopping.txt", "valorant.txt"];
+        let files: [&str; 5] = [
+            "basic.json",
+            "calories.txt",
+            "progress.txt",
+            "shopping.txt",
+            "valorant.txt",
+        ];
         let paths: Vec<PathBuf> = files
             .iter()
-            .map(|x| Path::new("database/").join(x)).collect();
+            .map(|x| Path::new("database/").join(x))
+            .collect();
         for path in paths {
             if !path.exists() {
                 File::create(path).unwrap();
