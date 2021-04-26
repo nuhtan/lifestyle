@@ -111,8 +111,8 @@ impl State {
     }
 
     pub fn verify_files_exist() {
-        let strs: [&str; 5] = ["basic.json", "calories.txt", "progress.txt", "shopping.txt", "valorant.txt"];
-        let paths: Vec<PathBuf> = strs
+        let files: [&str; 5] = ["basic.json", "calories.txt", "progress.txt", "shopping.txt", "valorant.txt"];
+        let paths: Vec<PathBuf> = files
             .iter()
             .map(|x| Path::new("database/").join(x)).collect();
         for path in paths {
