@@ -20,6 +20,13 @@ impl Basic {
         let file = fs::File::open("database/basic.json").unwrap();
         let mut content = String::new();
         BufReader::new(file).read_to_string(&mut content).unwrap();
+        if content.len() < 1 { // If the file is empty set empty goals
+            return Basic {
+                rank_goal: 0,
+                weight_goal: 0.0,
+                weight_start: 0.0
+            }
+        }
         let base: Basic = serde_json::from_str(content.as_str()).unwrap();
         base
     }
