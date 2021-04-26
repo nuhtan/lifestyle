@@ -12,7 +12,7 @@ fn main() -> Result<(), Error> {
     let ui_handle = thread::spawn(move || ui::run(shared_data_ui));
 
     ui_handle.join().unwrap().unwrap();
-    // Once the UI thread end the server should begin shutting down
+    // Once the UI thread ends the server should begin shutting down
     *shared_data.running.lock().unwrap() = false;
     server_handle.join().unwrap();
     shared_data.save();
