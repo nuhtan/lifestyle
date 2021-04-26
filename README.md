@@ -7,13 +7,19 @@ This is a website and server that is intended to be used to track and display pr
 - The content of the sub pages are rendered on the server side.
 
 ## What works?
-- None of the website properly interacts with the server at this stage. The cli for the server has regressed after changes to the calorie struct.
+- The weight and calorie tracking section is almost feature complete, aside from a bit more html and javascript to keep diet during a day until submitted everything works. Also having empty content breaks both calories and goals at this point.
+- Website progress is almost complete, the submit button for new bugs and features does nothing.
+
+## Current Issues
+- How should having no data be dealt with?
+    - Should there be a separate page in that case that prompts the user for the needed info? Likely choice with this being a single user system.
+    - Should there be placeholder data that needs to be modified? Probably not as the user currently has no control over the deletion of data from the website.
+    - Other options.
 
 ## How you can run this project:
 - Make sure that you have both Rust and Typescript installed.
 ```
 git clone https://github.com/nuhtan/lifestyle.git
-tsc
 cargo build --release
 ./target/release/main
 ```
