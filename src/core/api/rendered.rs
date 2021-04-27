@@ -1,4 +1,7 @@
-use std::{fs, io::{BufReader, Read}};
+use std::{
+    fs,
+    io::{BufReader, Read},
+};
 
 use super::{super::state_data::progress::ToDo, response::Response, State};
 
@@ -14,18 +17,14 @@ pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
     let mut _count_not_done: u32 = 0;
     for todo in prog {
         match todo {
-            ToDo::Bug(finished, _) => {
-                match finished {
-                    true => count_done += 1,
-                    false => _count_not_done += 1,
-                }
+            ToDo::Bug(finished, _) => match finished {
+                true => count_done += 1,
+                false => _count_not_done += 1,
             },
-            ToDo::Feature(finished, _) => {
-                match finished {
-                    true => count_done += 1,
-                    false => _count_not_done += 1,
-                }
-            }
+            ToDo::Feature(finished, _) => match finished {
+                true => count_done += 1,
+                false => _count_not_done += 1,
+            },
         }
     }
     let targets = shared_data.basics.lock().unwrap().clone();
@@ -35,13 +34,21 @@ pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
     reader.read_to_string(&mut contents).unwrap();
     let day_weight = match recent_cals {
         Some(a) => a.day_weight,
-        None => 0.0
+        None => 0.0,
     };
     let rank_rating_after = match recent_game {
         Some(a) => a.rank_rating_after,
-        None => 0
+        None => 0,
     };
-    let replacements = [targets.weight_goal.to_string(), (100.0 * (targets.weight_start - day_weight) / (targets.weight_start - targets.weight_goal)).to_string(), rank_conversion(targets.rank_goal), (100.0 * (rank_rating_after as f32 / targets.rank_goal as f32)).to_string(), (100.0 / (count_done as f32 / prog_len as f32)).to_string()];
+    let replacements = [
+        targets.weight_goal.to_string(),
+        (100.0 * (targets.weight_start - day_weight)
+            / (targets.weight_start - targets.weight_goal))
+            .to_string(),
+        rank_conversion(targets.rank_goal),
+        (100.0 * (rank_rating_after as f32 / targets.rank_goal as f32)).to_string(),
+        (100.0 / (count_done as f32 / prog_len as f32)).to_string(),
+    ];
     for replace in replacements.iter() {
         contents = contents.replacen("{}", format!("{}", replace).as_str(), 1);
     }
@@ -70,8 +77,9 @@ fn rank_conversion(target: u32) -> String {
         1700..=1799 => "Diamond 3",
         1800..=1899 => "Immortal",
         1900..=1999 => "Radiant",
-        _ => "Error"
-    }.to_string()
+        _ => "Error",
+    }
+    .to_string()
 }
 
 pub fn generate_calories<'a>() -> Response<'a> {
@@ -104,7 +112,7 @@ pub fn generate_progress<'a>(shared_data: State) -> Response<'a> {
                 match done {
                     true => {
                         item.push_str(" class=\"progress progress-done\">Done</button>");
-                    },
+                    }
                     false => {
                         item.push_str(" class=\"progress progress-wip\">WIP</button>");
                     }
@@ -112,12 +120,12 @@ pub fn generate_progress<'a>(shared_data: State) -> Response<'a> {
                 item.push_str("<h3>Bug: ");
                 item.push_str(&message[..]);
                 item.push_str("</h3>");
-            },
+            }
             ToDo::Feature(done, message) => {
                 match done {
                     true => {
                         item.push_str(" class=\"progress progress-done\">Done</button>");
-                    },
+                    }
                     false => {
                         item.push_str(" class=\"progress progress-wip\">WIP</button>");
                     }
@@ -125,7 +133,7 @@ pub fn generate_progress<'a>(shared_data: State) -> Response<'a> {
                 item.push_str("<h3>Feature:");
                 item.push_str(&message[..]);
                 item.push_str("</h3>");
-            },
+            }
         }
         item.push_str("</li>");
         list_items.push_str(&item[..]);
@@ -144,7 +152,7 @@ pub fn modal_calories<'a>(shared_data: State) -> Response<'a> {
     // let index = cals.last().unwrap().index + 1;
     let index = match cals.last() {
         Some(a) => a.index + 1,
-        None => 0
+        None => 0,
     };
     contents = contents.replacen("{}", index.to_string().as_str(), 1);
     Response::new(200, "text/html", String::from(contents))
