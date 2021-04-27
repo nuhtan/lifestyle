@@ -129,6 +129,7 @@ impl State {
             .collect();
         for path in paths {
             if !path.exists() {
+                std::fs::create_dir_all(path.parent().unwrap()).unwrap();
                 File::create(path).unwrap();
             }
         }
