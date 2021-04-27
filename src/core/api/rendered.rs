@@ -2,11 +2,12 @@ use std::{fs, io::{BufReader, Read}};
 
 use super::{super::state_data::progress::ToDo, response::Response, State};
 
+//TODO there should be another {} in the html that gets replaced for the weight. The same should happen for the valorant rank.
 pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
     let cals = shared_data.calories.lock().unwrap().clone();
-    let recent_cals = cals.last().unwrap();
+    let recent_cals = cals.last();
     let games = shared_data.valorant.lock().unwrap().clone();
-    let recent_game = games.last().unwrap();
+    let recent_game = games.last();
     let progress = shared_data.progress.lock().unwrap().clone();
     let prog = progress.in_progress;
     let prog_len = prog.len().clone();
@@ -33,7 +34,15 @@ pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
     let mut reader = BufReader::new(file);
     let mut contents = String::new();
     reader.read_to_string(&mut contents).unwrap();
-    let replacements = [100.0 * (targets.weight_start - recent_cals.day_weight) / (targets.weight_start - targets.weight_goal), 100.0 * (recent_game.rank_rating_after as f32 / targets.rank_goal as f32), 100.0 / (count_done as f32 / prog_len as f32)];
+    let day_weight = match recent_cals {
+        Some(a) => a.day_weight,
+        None => 0.0
+    };
+    let rank_rating_after = match recent_game {
+        Some(a) => a.rank_rating_after,
+        None => 0
+    };
+    let replacements = [100.0 * (targets.weight_start - day_weight) / (targets.weight_start - targets.weight_goal), 100.0 * (rank_rating_after as f32 / targets.rank_goal as f32), 100.0 / (count_done as f32 / prog_len as f32)];
     for replace in replacements.iter() {
         contents = contents.replacen("{}", format!("{:.2}", replace).as_str(), 1);
     }
@@ -107,7 +116,11 @@ pub fn modal_calories<'a>(shared_data: State) -> Response<'a> {
     let mut contents = String::new();
     reader.read_to_string(&mut contents).unwrap();
     let cals = shared_data.calories.lock().unwrap().clone();
-    let index = cals.last().unwrap().index + 1;
+    // let index = cals.last().unwrap().index + 1;
+    let index = match cals.last() {
+        Some(a) => a.index + 1,
+        None => 0
+    };
     contents = contents.replacen("{}", index.to_string().as_str(), 1);
     Response::new(200, "text/html", String::from(contents))
 }
