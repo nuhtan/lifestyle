@@ -42,11 +42,37 @@ pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
         Some(a) => a.rank_rating_after,
         None => 0
     };
-    let replacements = [100.0 * (targets.weight_start - day_weight) / (targets.weight_start - targets.weight_goal), 100.0 * (rank_rating_after as f32 / targets.rank_goal as f32), 100.0 / (count_done as f32 / prog_len as f32)];
+    let replacements = [targets.weight_goal.to_string(), (100.0 * (targets.weight_start - day_weight) / (targets.weight_start - targets.weight_goal)).to_string(), rank_conversion(targets.rank_goal), (100.0 * (rank_rating_after as f32 / targets.rank_goal as f32)).to_string(), (100.0 / (count_done as f32 / prog_len as f32)).to_string()];
     for replace in replacements.iter() {
-        contents = contents.replacen("{}", format!("{:.2}", replace).as_str(), 1);
+        contents = contents.replacen("{}", format!("{}", replace).as_str(), 1);
     }
     Response::new(200, "text/html", contents)
+}
+
+fn rank_conversion(target: u32) -> String {
+    match target {
+        0..=99 => "Iron 1",
+        100..=199 => "Iron 2",
+        200..=299 => "Iron 3",
+        300..=399 => "Bronze 1",
+        400..=499 => "Bronze 2",
+        500..=599 => "Bronze 3",
+        600..=699 => "Silver 1",
+        700..=799 => "Silver 2",
+        800..=899 => "Silver 3",
+        900..=999 => "Gold 1",
+        1000..=1099 => "Gold 2",
+        1100..=1199 => "Gold 3",
+        1200..=1299 => "Platinum 1",
+        1300..=1399 => "Platinum 2",
+        1400..=1499 => "Platinum 3",
+        1500..=1599 => "Diamond 1",
+        1600..=1699 => "Diamond 2",
+        1700..=1799 => "Diamond 3",
+        1800..=1899 => "Immortal",
+        1900..=1999 => "Radiant",
+        _ => "Error"
+    }.to_string()
 }
 
 pub fn generate_calories<'a>() -> Response<'a> {
