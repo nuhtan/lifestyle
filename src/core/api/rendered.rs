@@ -2,7 +2,6 @@ use std::{fs, io::{BufReader, Read}};
 
 use super::{super::state_data::progress::ToDo, response::Response, State};
 
-//TODO there should be another {} in the html that gets replaced for the weight. The same should happen for the valorant rank.
 pub fn generate_goals<'a>(shared_data: State) -> Response<'a> {
     let cals = shared_data.calories.lock().unwrap().clone();
     let recent_cals = cals.last();
