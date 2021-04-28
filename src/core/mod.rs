@@ -5,10 +5,9 @@ use tui::widgets::ListState;
 
 pub mod api;
 pub mod content;
-pub mod state_data;
-
 pub mod response;
 pub mod server;
+pub mod state_data;
 pub mod ui;
 pub struct TabsState<'a> {
     pub titles: Vec<&'a str>,
