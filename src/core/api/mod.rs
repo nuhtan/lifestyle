@@ -1,6 +1,7 @@
 use super::{response, state_data::state::State};
 
 pub mod calories;
+pub mod progress;
 pub mod rendered;
 
 pub fn apply_request<'a>(
@@ -10,6 +11,7 @@ pub fn apply_request<'a>(
 ) -> Result<response::Response<'a>, response::Response<'a>> {
     match path {
         "/api/calories/add/day" => calories::add_day(body, shared_data),
+        "/api/progress/add" => progress::add(body, shared_data),
         _ => Err(response::Response::new(
             404,
             "application/json",
