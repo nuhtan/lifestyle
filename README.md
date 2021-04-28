@@ -7,14 +7,16 @@ This is a website and server that is intended to be used to track and display pr
 - The content of the sub pages are rendered on the server side.
 
 ## What works?
-- The weight and calorie tracking section is almost feature complete, aside from a bit more html and javascript to keep diet during a day until submitted everything works. Also having empty content breaks both calories and goals at this point.
-- Website progress is almost complete, the submit button for new bugs and features does nothing.
+- The overview page properly displays data properly.
+- Calorie and weight tracking is feature complete.
+- Adding new bugs/features in the progress section works from client to server.
 
 ## Current Issues
-- How should having no data be dealt with?
-    - Should there be a separate page in that case that prompts the user for the needed info? Likely choice with this being a single user system.
-    - Should there be placeholder data that needs to be modified? Probably not as the user currently has no control over the deletion of data from the website.
-    - Other options.
+- There is no way to edit the goals.
+    - A button should be added to the overview that allows a user to modify values.
+- Feature progress is not visible on client side.
+    - No way to delete or mark as complete.
+- Shopping and Valorant haven't been touched.
 
 ## How you can run this project:
 - Make sure that you have both Rust and Typescript installed.
