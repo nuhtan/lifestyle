@@ -144,54 +144,81 @@
         }
 
         async function postForm() {
-            let indexVal = document.getElementById("index").value;
-            let weightVal = document.getElementById("day_weight").value;
-            let burnVal = document.getElementById("calories_burned").value;
-            let dateObj = new Date();
-            let foodVal = [];
-            let date = [dateObj.getYear(), dateObj.getMonth(), dateObj.getDate()];
-            let children = document.getElementById("itemList").childNodes;
-            let c = []
-            children.forEach(child => {
-                c.push(child);
-            });
-            c.shift();
-            c.forEach(child => {
-                let parts = child.textContent.substr(1).split(": ");
-                foodVal.push([parts[0], parseInt(parts[1])]);
-            });
-            let fullCalories = 0
-            foodVal.forEach(item => {
-                fullCalories += item[1]
-            });
+            let data;
+            let end;
+            switch(currentPage) {
+                case 1:
+                    let indexVal = document.getElementById("index").value;
+                    let weightVal = document.getElementById("day_weight").value;
+                    let burnVal = document.getElementById("calories_burned").value;
+                    let dateObj = new Date();
+                    let foodVal = [];
+                    let date = [dateObj.getYear(), dateObj.getMonth(), dateObj.getDate()];
+                    let children = document.getElementById("itemList").childNodes;
+                    let c = []
+                    children.forEach(child => {
+                        c.push(child);
+                    });
+                    c.shift();
+                    c.forEach(child => {
+                        let parts = child.textContent.substr(1).split(": ");
+                        foodVal.push([parts[0], parseInt(parts[1])]);
+                    });
+                    let fullCalories = 0
+                    foodVal.forEach(item => {
+                        fullCalories += item[1]
+                    });
 
-            let data = {
-                "index": parseInt(indexVal),
-                "total": fullCalories - burnVal,
-                "date": date,
-                "burn": parseInt(burnVal),
-                "day_weight": parseFloat(weightVal),
-                "food": foodVal
-            };
+                    data = {
+                        "index": parseInt(indexVal),
+                        "total": fullCalories - burnVal,
+                        "date": date,
+                        "burn": parseInt(burnVal),
+                        "day_weight": parseFloat(weightVal),
+                        "food": foodVal
+                    };
 
-            let end = await fetch("/api/calories/add/day", {
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => {
-                return res.json().then(body => {
-                    return body;
-                });
-            });
-            if (end.status == "completed") {
-                chart.data.labels.push(parseInt(indexVal));
-                chart.data.datasets[0].data.push(parseInt(fullCalories - burnVal))
-                chart.data.datasets[1].data.push(parseInt(fullCalories))
-                chart.data.datasets[2].data.push(parseInt(burnVal))
-                chart.data.datasets[3].data.push(parseFloat(weightVal))
-                chart.update();
-                document.getElementById("myModal").style.display = "none";
-                window.localStorage.setItem("foods", JSON.stringify([]));
+                    end = await fetch("/api/calories/add/day", {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    }).then(res => {
+                        return res.json().then(body => {
+                            return body;
+                        });
+                    });
+                    if (end.status == "completed") {
+                        chart.data.labels.push(parseInt(indexVal));
+                        chart.data.datasets[0].data.push(parseInt(fullCalories - burnVal))
+                        chart.data.datasets[1].data.push(parseInt(fullCalories))
+                        chart.data.datasets[2].data.push(parseInt(burnVal))
+                        chart.data.datasets[3].data.push(parseFloat(weightVal))
+                        chart.update();
+                        document.getElementById("myModal").style.display = "none";
+                        window.localStorage.setItem("foods", JSON.stringify([]));
+                    }
+                    break;
+                case 4:
+                    let typeProg = document.getElementById("checkBug").attributes["checked"].value
+                    let textProg = document.getElementById("description").value;
+                    switch (typeProg) {
+                        case 'true':
+                            data = {"Feature": [false, `${textProg}`]};
+                            break;
+                        case 'false':
+                            data = {"Bug": [false, `${textProg}`]};
+                            break;
+                    }
+                    end = await fetch("/api/progress/add", {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    }).then(res => {
+                        return res.json().then(body => {
+                            return body;
+                        });
+                    });
+                    break;
             }
+            
         }
     </script>
 </body>
