@@ -8,7 +8,7 @@ use std::{
 
 use serde::Serialize;
 
-use super::{super::StatefulList, Basic, calories::Calories, progress::{Progress, ToDo}, shopping_item::ShoppingItem, valorant_game::ValorantGame};
+use super::{super::StatefulList, Basic, calories::Calories, progress::Progress, shopping_item::ShoppingItem, valorant_game::ValorantGame};
 
 #[derive(Clone)]
 pub struct State {
