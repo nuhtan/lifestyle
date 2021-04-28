@@ -2,6 +2,8 @@ use std::{fs, io::{BufRead, BufReader}};
 
 use serde::{Deserialize, Serialize};
 
+use super::state::save_generic;
+
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Progress {
     pub in_progress: Vec<ToDo>
@@ -21,8 +23,11 @@ impl Progress {
         }
     }
 
-    pub fn save() {
-
+    pub fn save(self) {
+        println!(
+            "Wrote {} progress entries to file.",
+            save_generic(self.in_progress, "progress.txt")
+        );
     }
 }
 
